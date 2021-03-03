@@ -1,3 +1,5 @@
 [submodule "plant-help-client"]
 	path = plant-help-client
 	url = https://github.com/Ricardicus/plant-help-client
+	branch = master
+ 
