@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Timer from "./timer"
+import TimerAdder from "./timerAdder"
+import $ from 'jquery';
+
 
 class Timers extends Component {
   timer = null;
@@ -14,15 +17,18 @@ class Timers extends Component {
 
   fetchTimers() {
     const timerFetchURL = "/api/timers"
+    $("#loader").show();
     this.setState({ isFetching: true });
     fetch(timerFetchURL)
       .then(response => response.json())
       .then(result => {
         this.setState({timers: JSON.parse(result)["timers"], isFetching: false});
+         $("#loader").hide();
       })
       .catch(e => {
         console.log(e);
         this.setState({ isFetching: false});
+         $("#loader").hide();
       });
   }
 
@@ -44,7 +50,11 @@ class Timers extends Component {
       var container;
       console.log("Here, length: " + this.state.timers.length);
       return (this.state.timers.map(timer => (
-        <Timer key={timer.id} id={timer.id} update={timer.updated}>
+        <Timer 
+        key={timer.id} id={timer.id} update={timer.updated}
+        imgUrl={timer.imgUrl} description={timer.description}
+        hasImage={timer.hasImage}
+        >
         </Timer>
         )
       ))
@@ -55,11 +65,14 @@ class Timers extends Component {
   render() {
     return (
       <div>
+      <center>
       <table>
       <tbody>
       {this.drawTimers()}
       </tbody>
       </table>
+      </center>
+      <TimerAdder />
       </div>)
   };
 }

@@ -1,0 +1,28 @@
+img.timer-img {
+  width: 200px;
+  border-radius: 20px;
+}
+
+p.timer-desc {
+  font-style: italic;
+}
+
+tr.timer-record {
+  border-style: dotted;
+}
+
+tr.timer-record td {
+  border: 10px 10px 10px 10px;
+}
+
+img.timer-ctrl-img {
+  width: 100px;
+}
+
+img.overout {
+  transition: opacity 0.2s;
+}
+
+.hidden {
+  display:none;
+}

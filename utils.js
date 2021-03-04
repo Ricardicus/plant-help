@@ -2,6 +2,10 @@
 // ========
 
 function timeSince(date) {
+  if ( date == null ) {
+    return "...";
+  }
+
   let seconds = Math.floor((new Date() - date) / 1000);
   let interval = seconds / 31536000;
 

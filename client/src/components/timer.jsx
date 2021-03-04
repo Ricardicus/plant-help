@@ -19,8 +19,8 @@ class Timer extends Component {
 
   handleUpdate = () => {
     const updateURL = "/api/timerUpdate/" + this.props.id;
-    console.log(updateURL);
     this.setState({ isFetching: true });
+    $("#loader").show();
     fetch(updateURL)
       .then(response => response.json())
       .then(result => {
@@ -30,6 +30,24 @@ class Timer extends Component {
       .catch(e => {
         console.log(e);
         this.setState({ isFetching: false});
+      });
+  }
+
+  handleRemove = () => {
+    const updateURL = "/api/timerRemove/" + this.props.id;
+    console.log(updateURL);
+    this.setState({ isFetching: true });
+    $("#loader").show();
+    fetch(updateURL)
+      .then(response => response.json())
+      .then(result => {
+        this.setState({isFetching: false})
+        $("#loader").hide();
+      })
+      .catch(e => {
+        console.log(e);
+        this.setState({ isFetching: false});
+        $("#loader").hide();
       });
   }
 
@@ -51,17 +69,54 @@ class Timer extends Component {
     return "timer-" + this.props.id.toString();
   }
 
+  timerDeleteID () {
+    return "timer-del-" + this.props.id.toString();
+  }
+
+  timerUpdateID () {
+    return "timer-upd-" + this.props.id.toString();
+  }
+
+  getImage() {
+    if ( this.props.hasImage == true ) {
+      return (
+        <td>
+        <img class="timer-img" src={this.props.imgUrl} />
+        </td>
+        );
+    }
+    return <td></td>;
+  }
+
+  onMouseEnterHandler (id) {
+    $('#' + id).css('opacity', '0.2');
+  }
+
+  onMouseLeaveHandler (id) {
+    $('#' + id).css('opacity', '1.0');
+  }
+
   render () {
     return (
-      <tr>
+      <tr class="timer-record">
+        {this.getImage()}
         <td>
-        {this.props.children}
+        <p class="timer-desc">{this.props.description}</p>
         </td>
         <td id={this.timerID()}>{this.getUpdateTime()}</td>
         <td>
-        <button
+        <img id={this.timerUpdateID()} class="timer-ctrl-img overout"
           onClick={ () => {this.handleUpdate();} }
-          className="btn btn-secondary btn-sm">Update</button>
+          onMouseEnter={ () => {this.onMouseEnterHandler(this.timerUpdateID());} }
+          onMouseLeave={ () => {this.onMouseLeaveHandler(this.timerUpdateID());} }
+          src="/waterIcon.png" />
+        </td>
+        <td>
+        <img id={this.timerDeleteID()} class="timer-ctrl-img overout"
+          onClick={ () => {this.handleRemove();} }
+          onMouseEnter={ () => {this.onMouseEnterHandler(this.timerDeleteID());} }
+          onMouseLeave={ () => {this.onMouseLeaveHandler(this.timerDeleteID());} }
+          src="/minus.png" />
         </td>
       </tr>
     );

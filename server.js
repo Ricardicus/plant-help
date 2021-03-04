@@ -3,14 +3,34 @@ const cors = require('cors');
 const timer = require('./timer');
 const app = express();
 
-app.get('/api/timerNew', cors(), (req, res) => {
-  var newID = timer.timerNew();
+app.use(express.json()) 
+
+app.post('/api/timerNew', cors(), (req, res) => {
+  var newFields = {};
+  var acceptedFields = ["imgUrl", "description"];
+  var bodyParams = req.body;
+
+  console.log(bodyParams);
+
+  for (var i = 0; i < acceptedFields.length; i++ ) {
+    if ( acceptedFields[i] in bodyParams ) {
+      newFields[acceptedFields[i]] = bodyParams[acceptedFields[i]];
+    }
+  }
+
+  var newID = timer.timerNew(newFields);
   res.json(timer.timerOutputID(newID));
 });
 
 app.get('/api/timerUpdate/:id', cors(), (req, res) => {
   var id = req.params.id;
   var result = timer.timerUpdate(id);
+  res.json(result);
+});
+
+app.get('/api/timerRemove/:id', cors(), (req, res) => {
+  var id = req.params.id;
+  var result = timer.timerRemove(id);
   res.json(result);
 });
 
