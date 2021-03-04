@@ -10,8 +10,6 @@ app.post('/api/timerNew', cors(), (req, res) => {
   var acceptedFields = ["imgUrl", "description"];
   var bodyParams = req.body;
 
-  console.log(bodyParams);
-
   for (var i = 0; i < acceptedFields.length; i++ ) {
     if ( acceptedFields[i] in bodyParams ) {
       newFields[acceptedFields[i]] = bodyParams[acceptedFields[i]];

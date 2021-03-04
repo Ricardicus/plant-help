@@ -32,7 +32,6 @@ function timerNew(fields) {
     }
   }
 
-  timers[newId] = fields;
   timers[newId]["updated"] = null;
   return newId;
 }
