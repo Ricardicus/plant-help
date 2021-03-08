@@ -1,5 +1,5 @@
 img.timer-img {
-  width: 200px;
+  width: 100px;
   border-radius: 20px;
 }
 
@@ -16,7 +16,7 @@ tr.timer-record td {
 }
 
 img.timer-ctrl-img {
-  width: 100px;
+  width: 50px;
 }
 
 img.overout {
