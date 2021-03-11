@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  plant-help:
+
+services:
+
+  plant-help:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - plant-help
+
+  plant-help-mysql:
+    container_name: plant-help-mysql
+    image: mysql:8.0.17
+    user: "${UID}:${GID}"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: plant-help
+      MYSQL_DATABASE: plant-help
+      MYSQL_USER: plant-help
+      MYSQL_PASSWORD: plant-help
+    networks:
+      - plant-help
+    ports:
+      - "3306:3306"
+    #volumes:
+    #  - ./data/db:/var/lib/mysql
+
+

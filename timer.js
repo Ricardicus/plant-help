@@ -1,6 +1,14 @@
 // timers.js
 // =========
 const utils = require('./utils');
+const mysql = require('mysql');
+
+/* If connection OK store in DB */
+var useMysql = false;
+var connection;
+
+/* "manual" id count, if SQL isn't used */
+var idCount = 1;
 
 var timers = {"0": {
   "description": "server-generated",
@@ -8,9 +16,86 @@ var timers = {"0": {
   "hasImage": false,
   "updated": null
 }};
-var idCount = 1;
+
+function createTimerTableSQL() {
+  var sql = "CREATE TABLE plants (\
+  id int NOT NULL AUTO_INCREMENT,\
+  imgUrl VARCHAR(300),\
+  hasImage BOOLEAN,\
+  description VARCHAR(255),\
+  updated DATETIME);";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("Plant-table created. Ready to serve!");
+    useMysql = true;
+  });
+}
+
+function initSQL() {
+  connection = mysql.createConnection({
+    host: "plant-help-mysql",
+    user: "plant-help",
+    password: "plant-help",
+    database: "plant-help",
+    insecureAuth : true
+  });
+
+  connection.connect((err) => {
+    if(err){
+      console.log('Error connecting to Db, all memory is volatile now.');
+      console.log(err);
+      return;
+    }
+    console.log('Connection established');
+    createTimerTableSQL();
+  });
+
+}
+
+/* Wait a while before trying to connect */
+setTimeout(
+  initSQL
+, 20000);
 
 function timerNew(fields) {
+  if ( !useMysql ) {
+    return timerNewNoSQL(fields);
+  } else {
+    return timerNewSQL(fields);
+  }
+}
+
+/* No SQL Function */
+function timerNewSQL(fields) {
+  var newTimer = {
+    "description": "...",
+    "imgUrl": null,
+    "hasImage": false,
+    "updated": null
+  };
+
+  if ( "description" in fields ) {
+    newTimer["description"] = fields["description"];
+  }
+
+  if ( "imgUrl" in fields ) {
+    if ( fields["imgUrl"].includes(".") ) {
+      newTimer["imgUrl"] = fields["imgUrl"];
+      newTimer["hasImage"] = true;
+    }
+  }
+
+  var sql = "INSERT INTO customers (description, imgUrl, hasImage) VALUES ('" +
+  newTimer["description"] + "', '" + newTimer["imgUrl"] + ", '" + (
+    newTimer["hasImage"] ? 'true' : 'false') + "')";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("New timer register");
+  });
+}
+
+/* No SQL Function */
+function timerNewNoSQL(fields) {
   var newId = idCount.toString();
   idCount = idCount + 1;
 
