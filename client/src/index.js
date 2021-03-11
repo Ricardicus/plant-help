@@ -16,8 +16,8 @@ ReactDOM.render(
     <Loader
       type="Puff"
       color="#00BFFF"
-      height={100}
-      width={100}
+      height={30}
+      width={30}
     />
     </div>
     </center>

@@ -26,10 +26,12 @@ class Timer extends Component {
       .then(result => {
         this.setState({isFetching: false})
         $("#" + this.timerID()).html("Just now");
+        $("#loader").hide();
       })
       .catch(e => {
         console.log(e);
         this.setState({ isFetching: false});
+        $("#loader").hide();
       });
   }
 

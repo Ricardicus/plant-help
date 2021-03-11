@@ -17,18 +17,15 @@ class Timers extends Component {
 
   fetchTimers() {
     const timerFetchURL = "/api/timers"
-    $("#loader").show();
     this.setState({ isFetching: true });
     fetch(timerFetchURL)
       .then(response => response.json())
       .then(result => {
         this.setState({timers: JSON.parse(result)["timers"], isFetching: false});
-         $("#loader").hide();
       })
       .catch(e => {
         console.log(e);
         this.setState({ isFetching: false});
-         $("#loader").hide();
       });
   }
 

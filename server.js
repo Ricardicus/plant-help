@@ -5,6 +5,8 @@ const app = express();
 
 app.use(express.json()) 
 
+timer.timerInit();
+
 app.post('/api/timerNew', cors(), (req, res) => {
   var newFields = {};
   var acceptedFields = ["imgUrl", "description"];
